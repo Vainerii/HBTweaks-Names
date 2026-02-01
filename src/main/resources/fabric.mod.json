@@ -1,0 +1,45 @@
+{
+	"schemaVersion": 1,
+	"id": "herobrine-companion",
+	"version": "${version}",
+	"name": "Herobrine Companion",
+	"description": "Companion for herobrine.fr server",
+	"authors": [
+		"Vainerii"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/herobrine-companion/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"vai.hb.companion.HerobrineCompanion"
+		],
+		"client": [
+			"vai.hb.companion.HerobrineCompanionClient"
+		],
+		"modmenu": [
+			"vai.hb.companion.HerobrineCompanionModMenuIntegration"
+		]
+	},
+	"depends": {
+		"fabricloader": "=0.18.1",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-api-base": "*",
+		"fabric-lifecycle-events-v1": "*",
+		"fabric-key-binding-api-v1": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/4fpjCRNAN5"
+			},
+			"update_checker": false
+		}
+	}
+}
