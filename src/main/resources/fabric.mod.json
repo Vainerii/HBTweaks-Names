@@ -1,28 +1,28 @@
 {
 	"schemaVersion": 1,
-	"id": "herobrine-companion",
+	"id": "hbtweaks-names",
 	"version": "${version}",
-	"name": "Herobrine Companion",
+	"name": "HB Tweaks - Names",
 	"description": "Companion for herobrine.fr server",
 	"authors": [
 		"Vainerii"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/hbtweaks-names",
+		"sources": "https://github.com/Vainerii/HerobrineCompanion"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/herobrine-companion/icon.png",
+	"license": "MIT",
+	"icon": "assets/hbtweaks-names/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"main": [
-			"vai.hb.companion.HerobrineCompanion"
+			"vai.hbtweaks.names.HBTweakNames"
 		],
 		"client": [
-			"vai.hb.companion.HerobrineCompanionClient"
+			"vai.hbtweaks.names.HBTweakNamesClient"
 		],
 		"modmenu": [
-			"vai.hb.companion.HerobrineCompanionModMenuIntegration"
+			"vai.hbtweaks.names.HBTweakNamesModMenuIntegration"
 		]
 	},
 	"depends": {

@@ -1,4 +1,4 @@
-package vai.hb.companion.playername;
+package vai.hbtweaks.names.playername;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,6 @@ public class PlayerComponent {
     private static final int X_START = 5;
     private static final int Y_START = 5;
     private static final int BG_COLOR = 0xD0000000;
-    private static final int BD_COLOR = 0xFFFFFFFF;
 
     public PlayerComponent(Player p) throws Exception {
         // The RP name is not stored in the Player object anywhere. So we take it from the Tab menu

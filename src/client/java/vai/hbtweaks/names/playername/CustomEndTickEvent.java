@@ -1,4 +1,4 @@
-package vai.hb.companion.playername;
+package vai.hbtweaks.names.playername;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
@@ -7,6 +7,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,8 +17,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import vai.hb.companion.HerobrineCompanion;
-import vai.hb.companion.HerobrineCompanionClient;
+import vai.hbtweaks.names.HBTweakNames;
+import vai.hbtweaks.names.HBTweakNamesClient;
 
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -31,23 +32,23 @@ public class CustomEndTickEvent implements ClientTickEvents.EndTick {
     public CustomEndTickEvent() {
         HudElementRegistry.attachElementBefore(
                 VanillaHudElements.CHAT,
-                ResourceLocation.fromNamespaceAndPath(HerobrineCompanion.MOD_ID, "before_chat"),
+                ResourceLocation.fromNamespaceAndPath(HBTweakNames.MOD_ID, "before_chat"),
                 CustomEndTickEvent::render);
     }
 
     private static void render(GuiGraphics context, DeltaTracker tickCounter) {
 
         if (CustomEndTickEvent.targetPlayer != null) {
-            KeyMapping k = HerobrineCompanionClient.HOLD_KEY;
+            KeyMapping k = HBTweakNamesClient.HOLD_KEY;
             if (k.isDefault() || k.isDown())
                 CustomEndTickEvent.targetPlayer.draw(context);
         }
     }
 
-
     @Override
     public void onEndTick(Minecraft client) {
         try {
+            boolean is_mj = client.player.isCreative() || client.player.isSpectator() || HBTweakNames.DEBUG_MODE;
             Predicate<Entity> isVisible =
                     entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvisible();
             // Maybe there is a better way to do this ? It's weird that I had to do this manually
@@ -59,9 +60,11 @@ public class CustomEndTickEvent implements ClientTickEvents.EndTick {
                     ce.getBoundingBox().expandTowards(vv.scale(100f)).inflate(1.0D, 1.0D, 1.0D);
             EntityHitResult result = ProjectileUtil.getEntityHitResult(ce, ep, ray, searchBox,
                     isVisible, 10000f);
-            HitResult hit = client.getCameraEntity().pick(100, 0, false);
-            if (hit.distanceTo(client.cameraEntity) < result.distanceTo(client.cameraEntity))
-                throw new Exception();
+            if (!is_mj) {
+                HitResult hit = client.getCameraEntity().pick(100, 0, false);
+                if (hit.distanceTo(client.cameraEntity) < result.distanceTo(client.cameraEntity))
+                    throw new Exception();
+            }
 
             if (result.getEntity().getUUID() != this.lastUUID) {
 

@@ -1,4 +1,4 @@
-package vai.hb.companion;
+package vai.hbtweaks.names;
 
 import net.fabricmc.api.ModInitializer;
 
@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class HerobrineCompanion implements ModInitializer {
+public class HBTweakNames implements ModInitializer {
 	public static final String MOD_ID = "herobrine-companion";
 
 	// This logger is used to write text to the console and the log file.
@@ -16,9 +16,11 @@ public class HerobrineCompanion implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private static HerobrineCompanion instance;
+	public static final boolean DEBUG_MODE = false;
 
-	public static HerobrineCompanion getInstance() {
+	private static HBTweakNames instance;
+
+	public static HBTweakNames getInstance() {
 		return instance;
 	}
 
@@ -28,7 +30,7 @@ public class HerobrineCompanion implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		HerobrineCompanion.instance = this;
+		HBTweakNames.instance = this;
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.

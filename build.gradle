@@ -26,7 +26,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"herobrine-companion" {
+		"hbtweaks-names" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

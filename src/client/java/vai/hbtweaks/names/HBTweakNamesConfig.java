@@ -1,20 +1,20 @@
-package vai.hb.companion;
+package vai.hbtweaks.names;
 
 import net.minecraft.client.gui.screens.Screen;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class HerobrineCompanionConfig {
+public class HBTweakNamesConfig {
 
     private static final Map<String, Object> config = new HashMap<>();
 
     public static Object get(String key) {
-        return HerobrineCompanionConfig.config.get(key);
+        return HBTweakNamesConfig.config.get(key);
     }
 
     public static void set(String key, Object value) {
-        HerobrineCompanionConfig.config.put(key, value);
+        HBTweakNamesConfig.config.put(key, value);
     }
 
     /*private static void readMainConfig(File file) throws IOException {
