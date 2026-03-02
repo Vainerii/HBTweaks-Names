@@ -7,27 +7,13 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import vai.hbtweaks.names.HBTweakNames;
 import vai.hbtweaks.names.HBTweakNamesClient;
-
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class CustomEndTickEvent implements ClientTickEvents.EndTick {
 
     private static PlayerComponent targetPlayer = null;
-
-    private UUID lastUUID = null;
 
     public CustomEndTickEvent() {
         HudElementRegistry.attachElementBefore(
@@ -49,50 +35,8 @@ public class CustomEndTickEvent implements ClientTickEvents.EndTick {
     public void onEndTick(Minecraft client) {
         try {
             boolean is_mj = client.player.isCreative() || client.player.isSpectator() || HBTweakNames.DEBUG_MODE;
-            Predicate<Entity> isVisible =
-                    entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvisible();
-            // Maybe there is a better way to do this ? It's weird that I had to do this manually
-            Entity ce = client.getCameraEntity();
-            Vec3 ep = ce.getEyePosition();
-            Vec3 vv = ce.getViewVector(1.0f);
-            Vec3 ray = ep.add(vv.multiply(100f, 100f, 100f));
-            AABB searchBox =
-                    ce.getBoundingBox().expandTowards(vv.scale(100f)).inflate(1.0D, 1.0D, 1.0D);
-            EntityHitResult result = ProjectileUtil.getEntityHitResult(ce, ep, ray, searchBox,
-                    isVisible, 10000f);
-            if (!is_mj) {
-                HitResult hit = client.getCameraEntity().pick(100, 0, false);
-                if (hit.distanceTo(client.cameraEntity) < result.distanceTo(client.cameraEntity))
-                    throw new Exception();
-            }
-
-            if (result.getEntity().getUUID() != this.lastUUID) {
-
-                this.lastUUID = result.getEntity().getUUID();
-                if (result.getEntity().getType() == EntityType.PLAYER) {
-                    this.changeFocus((Player) result.getEntity());
-                }
-                else {
-                    resetFocus();
-                }
-            }
-        } catch (Exception e) {
-            if (this.lastUUID != null) {
-                this.lastUUID = null;
-                this.resetFocus();
-            }
-        }
+            CustomEndTickEvent.targetPlayer = PlayerComponent.getTargetedPlayerComponent(client.getCameraEntity(), is_mj);
+        } catch (Exception ignored) {}
     }
 
-    public void changeFocus(Player p) {
-        try {
-            CustomEndTickEvent.targetPlayer = new PlayerComponent(p);
-        } catch (Exception e) {
-            this.resetFocus();
-        }
-    }
-
-    public void resetFocus() {
-        CustomEndTickEvent.targetPlayer = null;
-    }
 }

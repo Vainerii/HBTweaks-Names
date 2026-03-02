@@ -20,9 +20,6 @@
 		],
 		"client": [
 			"vai.hbtweaks.names.HBTweakNamesClient"
-		],
-		"modmenu": [
-			"vai.hbtweaks.names.HBTweakNamesModMenuIntegration"
 		]
 	},
 	"depends": {
