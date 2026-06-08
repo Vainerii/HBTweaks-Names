@@ -4,7 +4,7 @@ import com.mojang.authlib.properties.Property;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -37,10 +37,10 @@ public class PlayerComponent {
         // minecraft_name property is a fake minecraft name shows when hovering a name in the chat
         Component fakeName = null;
         try {
-            fakeName = Component.literal(((Property) pi.getProfile().getProperties().get("minecraft_name").toArray()[0]).value())
+            fakeName = Component.literal(((Property) pi.getProfile().properties().get("minecraft_name").toArray()[0]).value())
                     .withStyle(ChatFormatting.DARK_GRAY);
         } catch (Exception ignored) {}
-        Component offMcName = Component.literal(pi.getProfile().getName())
+        Component offMcName = Component.literal(pi.getProfile().name())
                 .withStyle(ChatFormatting.DARK_GRAY);
 
         // If player is a GM, show both fake and real mc name
@@ -49,7 +49,8 @@ public class PlayerComponent {
         } else {
             this.mcName = fakeName == null ? offMcName : fakeName;
         }
-        this.customName = pi.getTabListDisplayName();
+        Component tabDisplayName = pi.getTabListDisplayName();
+        this.customName = tabDisplayName != null ? tabDisplayName : Component.literal(pi.getProfile().name());
         this.font = mc.font;
         int cnw = this.font.width(this.customName.getString());
         int mnw = this.font.width(this.mcName.getString());
@@ -59,10 +60,10 @@ public class PlayerComponent {
             throw new Exception();
     }
 
-    public void draw(GuiGraphics context) {
+    public void draw(GuiGraphicsExtractor context) {
         context.fill(X_START - 2, Y_START - 2, X_START + width + 2, Y_START + 20, BG_COLOR);
-        context.drawString(this.font, this.customName, X_START, Y_START, -1, true);
-        context.drawString(this.font, this.mcName, X_START, Y_START + 10, -1, true);
+        context.text(this.font, this.customName, X_START, Y_START, -1, true);
+        context.text(this.font, this.mcName, X_START, Y_START + 10, -1, true);
     }
 
     public static PlayerComponent getTargetedPlayerComponent(Entity e, boolean seeThroughWall) {

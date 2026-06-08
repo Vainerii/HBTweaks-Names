@@ -6,23 +6,24 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 import vai.hbtweaks.names.HBTweakNames;
 import vai.hbtweaks.names.HBTweakNamesClient;
 
 public class CustomEndTickEvent implements ClientTickEvents.EndTick {
 
     private static PlayerComponent targetPlayer = null;
+    private static Identifier ID = Identifier.fromNamespaceAndPath(HBTweakNames.MOD_ID, "before_chat");
 
     public CustomEndTickEvent() {
         HudElementRegistry.attachElementBefore(
                 VanillaHudElements.CHAT,
-                ResourceLocation.fromNamespaceAndPath(HBTweakNames.MOD_ID, "before_chat"),
+                CustomEndTickEvent.ID,
                 CustomEndTickEvent::render);
     }
 
-    private static void render(GuiGraphics context, DeltaTracker tickCounter) {
+    private static void render(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
 
         if (CustomEndTickEvent.targetPlayer != null) {
             KeyMapping k = HBTweakNamesClient.HOLD_KEY;
