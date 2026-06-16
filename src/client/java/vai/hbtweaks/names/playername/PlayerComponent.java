@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -16,8 +17,10 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import vai.hbtweaks.names.HBTweakNames;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class PlayerComponent {
     private final Component customName;
@@ -29,6 +32,12 @@ public class PlayerComponent {
     private static final int Y_START = 5;
     private static final int BG_COLOR = 0xD0000000;
     private static PlayerComponent lastPlayer = null;
+
+    /*
+    private final List<String> effectList;
+
+    private final int effectNbLines;
+    private final int effectWidth;*/
 
     public PlayerComponent(Player p) throws Exception {
         Minecraft mc = Minecraft.getInstance();
@@ -44,7 +53,7 @@ public class PlayerComponent {
                 .withStyle(ChatFormatting.DARK_GRAY);
 
         // If player is a GM, show both fake and real mc name
-        if (mc.player.isCreative() || mc.player.isSpectator() || HBTweakNames.DEBUG_MODE) {
+        if (hasPerm()) {
             this.mcName = fakeName == null ? offMcName : fakeName.copy().withStyle(ChatFormatting.YELLOW).append(" ").append(offMcName);
         } else {
             this.mcName = fakeName == null ? offMcName : fakeName;
@@ -56,6 +65,28 @@ public class PlayerComponent {
         int mnw = this.font.width(this.mcName.getString());
         this.width = Math.max(cnw, mnw);
         this.uuid = p.getUUID();
+
+        /*
+        if (hasPerm()) {
+
+            this.effectList = p.getActiveEffects().stream()
+                    .map(effect -> Component.translatable(effect.getDescriptionId()).getString())
+                    .collect(Collectors.toList());
+
+            HBTweakNames.LOGGER.info(this.effectList.toString());
+            this.effectNbLines = this.effectList.size();
+            int x = 0;
+            for (String s : this.effectList) {
+                x = Math.max(x, this.font.width(s));
+            }
+            this.effectWidth = x;
+        }
+        else {
+            this.effectList = null;
+            this.effectNbLines = 0;
+            this.effectWidth = 0;
+        }*/
+
         if (mnw * cnw == 0)
             throw new Exception();
     }
@@ -64,6 +95,18 @@ public class PlayerComponent {
         context.fill(X_START - 2, Y_START - 2, X_START + width + 2, Y_START + 20, BG_COLOR);
         context.text(this.font, this.customName, X_START, Y_START, -1, true);
         context.text(this.font, this.mcName, X_START, Y_START + 10, -1, true);
+
+        /*
+        if (this.effectNbLines != 0) {
+            int ox = X_START - 2;
+            int oy = Y_START + 22;
+
+            context.fill(ox, oy, ox + this.effectWidth + 4, oy + this.effectNbLines * 10 + 2, BG_COLOR);
+            int cy = 14;
+            for (String s : this.effectList) {
+                context.text(this.font, s, X_START, Y_START + (cy += 10), -1, true);
+            }
+        }*/
     }
 
     public static PlayerComponent getTargetedPlayerComponent(Entity e, boolean seeThroughWall) {
@@ -100,5 +143,10 @@ public class PlayerComponent {
         } catch (Exception exception) {
             return null;
         }
+    }
+
+    public static boolean hasPerm() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player.isCreative() || mc.player.isSpectator() || HBTweakNames.DEBUG_MODE;
     }
 }

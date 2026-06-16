@@ -11,8 +11,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import vai.hbtweaks.names.HBTweakNames;
-import vai.hbtweaks.names.playername.PlayerComponent;
+
+import static vai.hbtweaks.names.playername.PlayerComponent.hasPerm;
 
 public class ItemViewerCommand {
     private static final ItemViewerCommand instance = new ItemViewerCommand();
@@ -21,7 +21,7 @@ public class ItemViewerCommand {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommands.literal("seeitems").executes(context -> {
                 Minecraft minecraft = Minecraft.getInstance();
-                if (minecraft.player.isCreative() || minecraft.player.isSpectator() || HBTweakNames.DEBUG_MODE) {
+                if (hasPerm()) {
                     return instance.runCommand();
                 } else {
                     minecraft.player.sendSystemMessage(Component.literal("Vous n'avez pas la permission de lancer cette commande"));

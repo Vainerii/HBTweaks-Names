@@ -35,8 +35,7 @@ public class CustomEndTickEvent implements ClientTickEvents.EndTick {
     @Override
     public void onEndTick(Minecraft client) {
         try {
-            boolean is_mj = client.player.isCreative() || client.player.isSpectator() || HBTweakNames.DEBUG_MODE;
-            CustomEndTickEvent.targetPlayer = PlayerComponent.getTargetedPlayerComponent(client.getCameraEntity(), is_mj);
+            CustomEndTickEvent.targetPlayer = PlayerComponent.getTargetedPlayerComponent(client.getCameraEntity(), PlayerComponent.hasPerm());
         } catch (Exception ignored) {}
     }
 

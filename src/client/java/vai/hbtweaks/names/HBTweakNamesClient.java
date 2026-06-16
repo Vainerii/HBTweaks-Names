@@ -17,7 +17,7 @@ public class HBTweakNamesClient implements ClientModInitializer {
 	public static final String NAME = "HB Tweaks - Names";
 
 	public static KeyMapping HOLD_KEY = new KeyMapping(
-			"HB - Afficher nom (vide = permanent)",
+			"vai.hbtweaks.names.key",
 			InputConstants.Type.KEYSYM,
 			InputConstants.UNKNOWN.getValue(),
 			KeyMapping.Category.MISC);
