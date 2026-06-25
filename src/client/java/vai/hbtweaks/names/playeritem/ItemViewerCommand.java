@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import vai.hbtweaks.names.playername.PlayerComponent;
 
 import static vai.hbtweaks.names.playername.PlayerComponent.hasPerm;
 
@@ -45,7 +46,7 @@ public class ItemViewerCommand {
     public int runCommand() {
         Minecraft minecraft = Minecraft.getInstance();
         try {
-            Player target = minecraft.player;
+            Player target = PlayerComponent.getTargetedPlayer(minecraft.getCameraEntity(), true);
             Component tabName = Minecraft.getInstance().player.connection.getPlayerInfo(target.getUUID()).getTabListDisplayName();
             Component targetName = tabName != null ? tabName : target.getName();
 
